@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
+/*Ejercicio realizado por Araceli*/
 /*
 ENUNCIADO:
 Cargar TODOS los datos desde JSON (resources/data/clientes.json y libros.json) e insertarlos en la base.
