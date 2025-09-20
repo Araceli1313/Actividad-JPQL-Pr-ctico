@@ -17,12 +17,23 @@ public class Activity09_BulkUpdateDeleteLibros {
         try {
             entityManager.getTransaction().begin();
 
-            // TODO: UPDATE Libro l SET l.activo = FALSE WHERE l.stock = 0
-            // TODO: DELETE FROM Libro l WHERE l.precio < 100
+            // 1) Bulk UPDATE: poner activo = FALSE donde stock = 0
+            int actualizados = entityManager.createQuery(
+                    "UPDATE Libro l SET l.activo = FALSE WHERE l.stock = 0"
+            ).executeUpdate();
+            System.out.println("Libros actualizados (activo = FALSE donde stock = 0): " + actualizados);
+
+            // 2) Bulk DELETE: eliminar libros con precio < 100
+            int eliminados = entityManager.createQuery(
+                    "DELETE FROM Libro l WHERE l.precio < 100"
+            ).executeUpdate();
+            System.out.println("Libros eliminados (precio < 100): " + eliminados);
 
             entityManager.getTransaction().commit();
         } catch (RuntimeException exception) {
-            if (entityManager.getTransaction().isActive()) entityManager.getTransaction().rollback();
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
             throw exception;
         } finally {
             entityManager.close();
