@@ -1,8 +1,11 @@
 package com.darwinruiz.ejercicios;
 
+import com.darwinruiz.models.Libro;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+
+import java.util.List;
 
 /*
 ENUNCIADO:
@@ -14,7 +17,30 @@ public class Activity13_PaginacionLibros {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPQLExercisesPU");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            // TODO: bucle con setFirstResult(offset) y setMaxResults(5) hasta que la página venga vacía
+            int pageSize = 5;
+            int offset = 0;
+            int page = 1;
+
+            while (true) {
+                List<Libro> libros = entityManager.createQuery(
+                                "SELECT l FROM Libro l ORDER BY l.id ASC",
+                                Libro.class
+                        )
+                        .setFirstResult(offset)   // desde qué registro empezar
+                        .setMaxResults(pageSize)  // cuántos registros traer
+                        .getResultList();
+
+                if (libros.isEmpty()) {
+                    break; // no hay más resultados, salir del bucle
+                }
+
+                System.out.println("Página " + page + ":");
+                libros.forEach(System.out::println);
+
+                offset += pageSize; // avanzar al siguiente bloque
+                page++;
+            }
+
         } finally {
             entityManager.close();
             entityManagerFactory.close();
